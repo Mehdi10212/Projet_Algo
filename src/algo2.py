@@ -4,7 +4,7 @@ import sys
 
 
 graphe = {}
-aretes = list()
+aretes = set()
 
 solution = sys.maxsize
 
@@ -29,19 +29,22 @@ for i in range(lenLignes):
         sommet1 = lignes[i].split()[0]
         sommet2 = lignes[i].split()[1]
 
-        aretes.append( (  int(sommet1) , int(sommet2) ) ) 
+        aretes.add( (  int(sommet1) , int(sommet2) ) ) 
 
         graphe.setdefault(sommet1, []).append(sommet2)
         graphe.setdefault(sommet2, []).append(sommet1)
 
 
 def afficherAretes(A):
+    # Supprimer toutes les arêtes du graphe : le graphe résultat est une collection de sommets isolés.
+    # Return : Liste d'arêtes
     for arete in A:
         print(arete[0],arete[1])
 
 
 def supprimeTout(A):
     return A
+
 
 
 def ajoutTout(S,A):
@@ -54,10 +57,7 @@ def ajoutTout(S,A):
     return At - A
 
 
-afficherAretes(ajoutTout(nbS,aretes))
-
-#print(graphe)
-
+#afficherAretes(ajoutTout(nbS,aretes))
 
 """
 for u in graphe:
@@ -65,18 +65,4 @@ for u in graphe:
             print("Arête {%s,%s}" % (u,v))
 """                                    
  
-def SuppAretes():
-    # Supprimer toutes les arêtes du graphe : le graphe résultat est une collection de sommets isolés.
-    # Return : Liste d'arêtes
-    for arete in aretes:
-        print(arete[0],arete[1])
-    
-    """
-    for u in graphe:
-        for v in graphe[u]:
-            print(u + " " + v)
-    """
-    
-
-#SuppAretes()
 
