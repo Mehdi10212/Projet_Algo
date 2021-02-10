@@ -1,9 +1,10 @@
 import fileinput
 import sys
 import time
-from math import *
 import random
 import signal
+from math import sqrt
+
 
 class Killer:
   exit_now = False
@@ -81,14 +82,20 @@ def ajoutTout(S,A):
 
 
 # Heuristique : GRASP fonctionne en moins de 10 min pour les JDD où il a moins de 10 000 sommets environs 
-def GRASP(G, timeout, timeout_start):
+def GRASP(G, Tmax):
 
     killer = Killer()
     G_etoile = constructGraphe(construction(G))
-     
+    start_time = time.time()  
+    tempsMoyen = 0
+    tempsTotal = 0 
+    tempsRestant =  Tmax - start_time
+    nbIteration = 0
 
+    while(tempsRestant > 2*tempsMoyen):
 
-    while(time.time() < timeout_start + timeout):
+        tempsA = time.time()
+
         if killer.exit_now:
             return G_etoile
         G_prim = construction(G)
@@ -96,6 +103,14 @@ def GRASP(G, timeout, timeout_start):
         
         if (len(compareGraphes(G, G_prim)) < len(compareGraphes(G, G_etoile))):
             G_etoile = G_prim
+
+        tempsIteration = round(time.time()- tempsA,2) 
+        tempsTotal += tempsIteration 
+        
+        nbIteration += 1
+        
+        tempsMoyen =  tempsTotal / nbIteration
+        tempsRestant -= tempsIteration
 
     return G_etoile
 
@@ -110,20 +125,15 @@ def relativeNeighborhood(G):
 
     CL = sorted(CL, key=lambda CL: CL[1])
     Kbest = 0
-    
-    
+        
     
     while(CL):
         
         Kmin = max(round (Kbest-sqrt(n)) , 1)
         Kmax = min(round (Kbest+ sqrt(n)) , n)
         K = random.randint(Kmin, Kmax) #K comprit entre 1 et n 
-        #print("n =", n)
-        #print("Kmin", Kmin)
-        #print("Kmax",Kmax)
-       # print("K =", K)
 
-        for i in range(K):
+        for _ in range(K):
             try:
                 clusters.append([CL.pop()[0]])
             except IndexError:
@@ -308,12 +318,8 @@ def vertexAgglomeration(G):
     CL = sorted(CL, key=lambda CL: CL[1])
 
     K = random.randint(1, n) #K comprit entre 1 et n 
-        #print("n =", n)
-        #print("Kmin", Kmin)
-        #print("Kmax",Kmax)
-       # print("K =", K)
 
-    for i in range(K):
+    for _ in range(K):
         try:
             clusters.append([CL.pop()[0]])
         except IndexError:
@@ -346,6 +352,11 @@ def localSearch(clusters):
         return clusterSplit(clusters)
 
 
-start_time = time.time()  
-afficherAretes(compareGraphes(GRASP(graphe,600,start_time),graphe) )
+timeout = time.time() + 600
+
+if (nbS > 30000):
+    supprimeTout(supprimeTout)
+
+else:
+    afficherAretes(compareGraphes(GRASP(graphe,timeout),graphe))
 
