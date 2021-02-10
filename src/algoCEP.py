@@ -353,6 +353,7 @@ def localSearch(clusters):
 
 
 timeout = time.time() + 600
+timeout = timeout - 10 # Pour la marge d'erreur
 
 if (nbS > 30000):
     supprimeTout(supprimeTout)
