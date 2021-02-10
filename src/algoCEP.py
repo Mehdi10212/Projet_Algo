@@ -104,8 +104,8 @@ def GRASP(G, Tmax):
         if (len(compareGraphes(G, G_prim)) < len(compareGraphes(G, G_etoile))):
             G_etoile = G_prim
 
-        tempsIteration = round(time.time()- tempsA,2) 
-        tempsTotal += tempsIteration 
+        tempsIteration = time.time() - tempsA 
+        tempsTotal += tempsIteration
         
         nbIteration += 1
         
@@ -352,7 +352,7 @@ def localSearch(clusters):
         return clusterSplit(clusters)
 
 
-timeout = time.time() + 600
+timeout = time.time() + 3
 
 if (nbS > 30000):
     supprimeTout(supprimeTout)
