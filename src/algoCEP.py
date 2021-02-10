@@ -352,7 +352,7 @@ def localSearch(clusters):
         return clusterSplit(clusters)
 
 
-timeout = time.time() + 3
+timeout = time.time() + 600
 
 if (nbS > 30000):
     supprimeTout(supprimeTout)
